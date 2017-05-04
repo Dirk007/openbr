@@ -166,10 +166,11 @@ public:
     CascadeResourceMaker(const QString &model)
     {
         file = Globals->sdkPath + "/share/openbr/models/";
-        if      (model == "Ear")         file += "haarcascades/haarcascade_ear.xml";
-        else if (model == "Eye")         file += "haarcascades/haarcascade_eye_tree_eyeglasses.xml";
-        else if (model == "FrontalFace") file += "haarcascades/haarcascade_frontalface_alt2.xml";
-        else if (model == "ProfileFace") file += "haarcascades/haarcascade_profileface.xml";
+        if      (model == "Ear")            file += "haarcascades/haarcascade_ear.xml";
+        else if (model == "Eye")            file += "haarcascades/haarcascade_eye_tree_eyeglasses.xml";
+        else if (model == "FrontalFaceLBP") file += "lbpcascades/lbpcascade_frontalface.xml";
+        else if (model == "FrontalFace")    file += "haarcascades/haarcascade_frontalface_default.xml";
+        else if (model == "ProfileFace")    file += "haarcascades/haarcascade_profileface.xml";
         else {
             // Create a directory for trainable cascades
             file += "openbrcascades/"+model+"/cascade.xml";
@@ -255,7 +256,7 @@ class CascadeTransform : public MetaTransform
     void init()
     {
         cascadeResource.setResourceMaker(new CascadeResourceMaker(model));
-        if (model == "Ear" || model == "Eye" || model == "FrontalFace" || model == "ProfileFace")
+        if (model == "Ear" || model == "Eye" || model == "FrontalFace" || model == "FrontalFaceLBP" || model == "ProfileFace")
             this->trainable = false;
     }
     
@@ -263,7 +264,7 @@ class CascadeTransform : public MetaTransform
     void train(const TemplateList& data)
     {
         // Don't train if we're using OpenCV's prebuilt cascades
-        if (model == "Ear" || model == "Eye" || model == "FrontalFace" || model == "ProfileFace")
+        if (model == "Ear" || model == "Eye" || model == "FrontalFace" || model == "FrontalFaceLBP" || model == "ProfileFace")
             return;
 
         // Open positive and negative list temporary files
